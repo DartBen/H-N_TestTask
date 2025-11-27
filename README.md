@@ -10,17 +10,17 @@
 
 1. Установите .NET 8 SDK.
 2. В корне репозитория выполните:
-   ```bash
+   ```
    dotnet restore
    dotnet build
    ```
 3. Запустите симулятор:
    ```
-   dotnet run --project src/Simulator/Simulator.WebApi
+   dotnet run --project src/Simulator/Simulator.WebApi -lp https
    ```
 4. В отдельном терминале запустите нормализатор:
    ```
-   dotnet run --project src/Normalizer/Normalizer.WebApi
+   dotnet run --project src/Normalizer/Normalizer.WebApi -lp https
    ```
 В приложении `Normalizer.WebApi` - настроен автоматический запуск браузера 
 
