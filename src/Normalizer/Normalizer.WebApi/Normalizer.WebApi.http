@@ -1,0 +1,6 @@
+@Normalizer.WebApi_HostAddress = http://localhost:5163
+
+GET {{Normalizer.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

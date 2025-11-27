@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/Normalizer/">
+    <Project Path="Normalizer/Normalizer.Application/Normalizer.Application.csproj" />
+    <Project Path="Normalizer/Normalizer.Domain/Normalizer.Domain.csproj" />
+    <Project Path="Normalizer/Normalizer.Infrastructure/Normalizer.Infrastructure.csproj" />
+    <Project Path="Normalizer/Normalizer.WebApi/Normalizer.WebApi.csproj" />
+  </Folder>
+  <Folder Name="/Simulator/">
+    <Project Path="Simulator/Simulator.Application/Simulator.Application.csproj" />
+    <Project Path="Simulator/Simulator.Domain/Simulator.Domain.csproj" />
+    <Project Path="Simulator/Simulator.Infrastructure/Simulator.Infrastructure.csproj" />
+    <Project Path="Simulator/Simulator.WebApi/Simulator.WebApi.csproj" />
+  </Folder>
+  <Folder Name="/Элементы решения/">
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+  </Folder>
+</Solution>

@@ -1,0 +1,77 @@
+# Тестовое задание: Эмуляция фасовочной линии и нормализация сигналов  
+Для компании Health & Nutrition
+
+Решение состоит из двух независимых ASP.NET Core Web API-приложений:
+- **Simulator** — эмулятор счётчика продукции,
+- **Normalizer** — компонент расчёта скорости, статуса линии и агрегации событий.
+
+---
+## Запуск
+
+1. Установите .NET 8 SDK.
+2. В корне репозитория выполните:
+   ```bash
+   dotnet restore
+   dotnet build
+   ```
+3. Запустите симулятор:
+   ```
+   dotnet run --project src/Simulator/Simulator.WebApi
+   ```
+4. В отдельном терминале запустите нормализатор:
+   ```
+   dotnet run --project src/Normalizer/Normalizer.WebApi
+   ```
+В приложении `Normalizer.WebApi` - настроен автоматический запуск браузера 
+
+---
+## Эндпоинты
+
+### Simulator
+- `GET /api/simulatorreading` — текущее значение счётчика  
+  Пример ответа:
+  ```json
+  { "timestamp": "2025-11-27T10:00:00Z", "counterValue": 4281 }
+  ```
+- Документация: `GET /swagger`
+
+### Normalizer
+- `GET /api/line/status` — текущий статус и скорость  
+  Пример:
+  ```json
+  { "timestamp": "2025-11-27T10:01:00Z", "status": "Running", "speedPcsPerHour": 9850.5 }
+  ```
+- `GET /api/line/stats?period=24h` — агрегация событий за период (`1h`, `24h`, `7d`)  
+  Поддерживаемые форматы: `{число}h` или `{число}d`.
+- Документация: `GET /swagger`
+
+---
+
+## Настройка
+
+Приложение поддерживает конфигурацию через **переменные окружения** (приоритет над `appsettings.json`).
+
+### Simulator
+
+| Параметр | Описание | Значение по умолчанию |
+|--------|--------|---------------------|
+| `Simulator__MaxCounterValue` | Порог сброса счётчика | `10000` |
+| `Simulator__NominalSpeedPcsPerHour` | Номинальная скорость линии | `10000` |
+| `Simulator__MaxPhysicalSpeedPcsPerSec` | Макс. физическая скорость | `3.0` |
+| `Simulator__LowSpeedThresholdFactor` | Порог пониженной скорости | `0.95` |
+| `Simulator__StoppedNoChangeThresholdSeconds` | Время без изменения счётчика до статуса `Stopped` | `10` |
+| `Simulator__NoDataThresholdSeconds` | Время без новых данных до статуса `NoData` | `5` |
+
+### Normalizer
+
+| Параметр | Описание | Значение по умолчанию |
+|--------|--------|---------------------|
+| `Normalizer__SimulatorUrl` | Адрес симулятора | `https://localhost:7215` |
+| `Normalizer__NominalSpeedPcsPerHour` | Номинальная скорость | `10000` |
+| `Normalizer__LowSpeedThresholdFactor` | Порог пониженной скорости | `0.95` |
+| `Normalizer__StoppedThresholdSeconds` | Время без изменения счётчика до статуса `Stopped` | `5` |
+| `Normalizer__NoDataThresholdSeconds` | Время без новых данных до статуса `NoData` | `5` |
+| `Normalizer__PollingIntervalMs` | Интервал опроса симулятора (мс) | `1500` |
+
+> **Важно**: По умолчанию нормализатор обращается к симулятору по **HTTPS-адресу** `https://localhost:7215`. Убедитесь, что симулятор запущен и доверен в системе (или измените URL на HTTP в настройках).
+
